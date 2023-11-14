@@ -15,6 +15,7 @@ const Banner = () => {
         autoPlay={true}
         interval={3000}
         infiniteLoop={true}
+        className="text-center"
       >
         <div>
           <img src={img1} />
