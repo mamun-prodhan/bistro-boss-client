@@ -1,23 +1,38 @@
 import { useContext } from "react";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../providers/AuthProvider";
+import Swal from "sweetalert2";
 
 const SignUp = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm();
 
-  const { createUser } = useContext(AuthContext);
+  const { createUser, updateUserProfile } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const onSubmit = (data) => {
     console.log(data);
     createUser(data.email, data.password).then((result) => {
       const loggedUser = result.user;
       console.log(loggedUser);
+      updateUserProfile(data.name, data.photoURL)
+        .then(() => {
+          console.log("User profile info updated");
+          reset();
+          Swal.fire({
+            title: "Sign up Successfull",
+            text: "You clicked the button!",
+            icon: "success",
+          });
+          navigate("/");
+        })
+        .catch((error) => console.log(error));
     });
   };
 
@@ -52,6 +67,23 @@ const SignUp = () => {
                 {errors.name && (
                   <span className="text-red-600 mt-2 text-sm font-bold">
                     Name field is required
+                  </span>
+                )}
+              </div>
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Photo URL</span>
+                </label>
+                <input
+                  type="text"
+                  name="photoURL"
+                  {...register("photoURL", { required: true })}
+                  placeholder="photoURL"
+                  className="input input-bordered"
+                />
+                {errors.photoURL && (
+                  <span className="text-red-600 mt-2 text-sm font-bold">
+                    Photo URL field is required
                   </span>
                 )}
               </div>
