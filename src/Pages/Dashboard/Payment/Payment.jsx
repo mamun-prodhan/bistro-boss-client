@@ -1,4 +1,9 @@
+import { loadStripe } from "@stripe/stripe-js";
 import SectionTitle from "../../../components/SectionTitle/SectionTitle";
+import { Elements } from "@stripe/react-stripe-js";
+
+// TODO: add publishable key
+const stripePromise = loadStripe("");
 
 const Payment = () => {
   return (
@@ -8,7 +13,7 @@ const Payment = () => {
         subHeading={"Please pay to eat"}
       ></SectionTitle>
       <div>
-        <h2 className="text-4xl">Taka pakhi koi gelo , aso uira uira</h2>
+        <Elements stripe={stripePromise}></Elements>
       </div>
     </div>
   );
